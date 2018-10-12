@@ -1,0 +1,87 @@
+import java.util.*;
+import javax.swing.event.*;
+
+/**
+   An invoice for a sale, consisting of line items.
+*/
+public class Invoice
+{
+   /**
+      Constructs a blank invoice.
+   */
+   public Invoice()
+   {
+      items = new ArrayList<>();
+      listeners = new ArrayList<>();
+   }
+
+  /**
+      Adds an item to the invoice.
+      @param item the item to add
+   */
+   public void addItem(LineItem item)
+   {
+	  //items.add(item);
+	  boolean isSameItem = false;
+	  for (LineItem itm : items) {
+		  if (itm == item) {
+			  itm.incrementCounter();
+			  isSameItem = true;
+		  }
+	  }
+	  if (isSameItem == false)
+		  items.add(item);
+      // Notify all observers of the change to the invoice
+      ChangeEvent event = new ChangeEvent(this);			//change in items == change in listener
+      for (ChangeListener listener : listeners)
+         listener.stateChanged(event);
+   }
+
+   /**
+      Adds a change listener to the invoice.
+      @param listener the change listener to add
+   */
+   public void addChangeListener(ChangeListener listener)
+   {
+      listeners.add(listener);
+   }
+
+   /**
+      Gets an iterator that iterates through the items.
+      @return an iterator for the items
+   */
+   public Iterator<LineItem> getItems()
+   {
+      return new
+         Iterator<LineItem>()
+         {
+            public boolean hasNext()
+            {
+               return current < items.size();
+            }
+
+            public LineItem next()
+            {
+               return items.get(current++);
+            }
+            public void remove()
+            {
+               throw new UnsupportedOperationException();
+            }
+
+            private int current = 0;
+         };
+   }
+
+   public String format(InvoiceFormatter formatter)
+   {
+      String r = formatter.formatHeader(); 
+      Iterator<LineItem> iter = getItems();
+      while (iter.hasNext())
+         r += formatter.formatLineItem(iter.next());
+      return r + formatter.formatFooter();
+   }
+
+   private ArrayList<LineItem> items;
+   private ArrayList<ChangeListener> listeners;
+}
