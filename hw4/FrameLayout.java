@@ -1,8 +1,6 @@
-import java.awt.*;
+iimport java.awt.*;
 import java.util.ArrayList;
-
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
 
 public class FrameLayout {
 	private ArrayList<Category> cat = new ArrayList<Category>();
@@ -14,14 +12,14 @@ public class FrameLayout {
 	public FrameLayout() {
 		gbc.insets = new Insets(5,5,5,5);
 
-		cat.add(new Category("iPhone XS", 100, new JTextField(5)));
-		cat.add(new Category("Samsung S9", 100,  new JTextField(5)));
-		cat.add(new Category("Google Pixel 3", 100,  new JTextField(5)));
-		cat.add(new Category("Nokie 74", 100,  new JTextField(5)));
-		cat.add(new Category("Flip Phone", 100,  new JTextField(5)));
-		cat.add(new Category("Other", 100,  new JTextField(5)));
+		cat.add(new Category("Category 1", 100, new JTextField(5)));
+		cat.add(new Category("Category 2", 100,  new JTextField(5)));
+		cat.add(new Category("Category 3", 100,  new JTextField(5)));
+		cat.add(new Category("Category 4", 100,  new JTextField(5)));
+		cat.add(new Category("Category 5", 100,  new JTextField(5)));
+		cat.add(new Category("Category 6", 100,  new JTextField(5)));
 
-		JPanel textPanel = new JPanel();
+		 textPanel = new JPanel();
 		 textPanel.setLayout(new BorderLayout());
 		 textPanel.add(new JLabel("Number Input"), BorderLayout.NORTH);
 		 JPanel gridText = new JPanel(new GridBagLayout());
@@ -41,11 +39,10 @@ public class FrameLayout {
 		 textPanel.add(changes, BorderLayout.SOUTH);
 				 
 		 
-		 JPanel graphPanel = new JPanel();
-		 graphPanel.setLayout(new BorderLayout());
-		 graphPanel.add(new JLabel("Graph Representation"), BorderLayout.NORTH);
-		 JPanel gridGraph = paintGraph();									// makes and paints graph
-		 graphPanel.add(gridGraph, BorderLayout.CENTER);
+		 graphPanel = new JPanel();
+		 graphPanel.setLayout(new BorderLayout());	// makes and paints graph
+		 JPanel graph = paintGraph();
+		 graphPanel.add(graph);
 		 
 		 
 		 
@@ -57,7 +54,7 @@ public class FrameLayout {
 				if (!text.equals(""))
 					cat.get(i).setValue(Integer.parseInt(text));
 			 }
-			 graphPanel.updateUI();
+			 changeGraph();
 		 });
 		 
 		 
@@ -92,15 +89,16 @@ public class FrameLayout {
 		 }
 		return panel;
 	}
-/*	
+
 	public void changeGraph() {
-		JPanel graph = paintGraph();									// makes and paints graph
-		graphPanel.add(graph, BorderLayout.CENTER);
-		ChangeEvent event = new ChangeEvent(this);
+		graphPanel.removeAll();
+		graphPanel.updateUI();
+		JPanel graph = paintGraph();
+		graphPanel.add(graph);
 	}
-*/
+	
 	public static void main(String[] args)
 	{
-		FrameLayout me = new FrameLayout();
+		FrameLayout frame = new FrameLayout();
 	}
  }
