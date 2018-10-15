@@ -1,26 +1,29 @@
-import java.awt.*;
+iimport java.awt.*;
 import java.util.ArrayList;
-
 import javax.swing.*;
 
 public class FrameLayout {
+	private ArrayList<Category> cat = new ArrayList<Category>();
+	GridBagConstraints gbc = new GridBagConstraints();
+	JPanel textPanel;
+	JPanel graphPanel;
+	
+	
 	public FrameLayout() {
-		ArrayList<Category> cat = new ArrayList<Category>();
-		cat.add(new Category("iPhone XS", 100));
-		cat.add(new Category("Samsung S9", 100));
-		cat.add(new Category("Google Pixel 3", 100));
-		cat.add(new Category("Nokie 74", 100));
-		cat.add(new Category("Flip Phone", 100));
-		cat.add(new Category("Other", 100));
+		gbc.insets = new Insets(5,5,5,5);
 
-		JPanel textPanel = new JPanel();
+		cat.add(new Category("Category 1", 100, new JTextField(5)));
+		cat.add(new Category("Category 2", 100,  new JTextField(5)));
+		cat.add(new Category("Category 3", 100,  new JTextField(5)));
+		cat.add(new Category("Category 4", 100,  new JTextField(5)));
+		cat.add(new Category("Category 5", 100,  new JTextField(5)));
+		cat.add(new Category("Category 6", 100,  new JTextField(5)));
+
+		 textPanel = new JPanel();
 		 textPanel.setLayout(new BorderLayout());
 		 textPanel.add(new JLabel("Number Input"), BorderLayout.NORTH);
 		 JPanel gridText = new JPanel(new GridBagLayout());
-		 textPanel.add(gridText, BorderLayout.CENTER);
-		 GridBagConstraints gbc = new GridBagConstraints();
-		 gbc.insets = new Insets(5,5,5,5);
-		 
+		 textPanel.add(gridText, BorderLayout.CENTER);		 
 		 for (int i = 0; i < cat.size(); i++) {
 			 gbc.gridx = 0;
 			 gbc.gridy = i;
@@ -30,28 +33,32 @@ public class FrameLayout {
 		 for (int i = 0; i < cat.size(); i++) {
 			 gbc.gridx = 1;
 			 gbc.gridy = i;
-			 gridText.add(new JTextField("00"), gbc);
+			 gridText.add(cat.get(i).getTextField(), gbc);
 		 }
+		 JButton changes = new JButton("Apply Changes");
+		 textPanel.add(changes, BorderLayout.SOUTH);
+				 
 		 
-		 JPanel graphPanel = new JPanel();
-		 graphPanel.setLayout(new BorderLayout());
-		 graphPanel.add(new JLabel("Graph Representation"), BorderLayout.NORTH);
-		 JPanel gridGraph = new JPanel(new GridBagLayout());
-		 graphPanel.add(gridGraph, BorderLayout.CENTER);
+		 graphPanel = new JPanel();
+		 graphPanel.setLayout(new BorderLayout());	// makes and paints graph
+		 JPanel graph = paintGraph();
+		 graphPanel.add(graph);
 		 
-		 for (int i = 0; i < cat.size(); i++) {
-			 gbc.gridx = 0;
-			 gbc.gridy = i;
-			 gridGraph.add(new JLabel(cat.get(i).getName()), gbc);
-		 }
 		 
-		 for(int i = 0; i < cat.size(); i++) {
-			 gbc.gridx = 1;
-			 gbc.gridy = i;
-			 Bar b = new Bar(cat.get(i).getValue());
-			 JLabel rect = new JLabel(b);
-			 gridGraph.add(rect, gbc);
-		 }
+		 
+		 
+		 changes.addActionListener(event ->
+		 {
+			 for (int i = 0; i < cat.size(); i++) {
+				String text = cat.get(i).getTextField().getText();
+				if (!text.equals(""))
+					cat.get(i).setValue(Integer.parseInt(text));
+			 }
+			 changeGraph();
+		 });
+		 
+		 
+		 
 		 
 		 
 		 JFrame frame = new JFrame();
@@ -64,8 +71,34 @@ public class FrameLayout {
 
 }
 	
+	public JPanel paintGraph() {
+		JPanel panel = new JPanel(new GridBagLayout());
+		for (int i = 0; i < cat.size(); i++) {
+			 gbc.gridx = 0;
+			 gbc.gridy = i;
+			 gbc.anchor = gbc.LINE_START;
+			 panel.add(new JLabel(cat.get(i).getName()), gbc);
+		 }
+		
+		for(int i = 0; i < cat.size(); i++) {
+			 gbc.gridx = 1;
+			 gbc.gridy = i;
+			 Bar b = new Bar(cat.get(i).getValue());
+			 JLabel rect = new JLabel(b);
+			 panel.add(rect, gbc);
+		 }
+		return panel;
+	}
+
+	public void changeGraph() {
+		graphPanel.removeAll();
+		graphPanel.updateUI();
+		JPanel graph = paintGraph();
+		graphPanel.add(graph);
+	}
+	
 	public static void main(String[] args)
 	{
-		FrameLayout me = new FrameLayout();
+		FrameLayout frame = new FrameLayout();
 	}
  }
